@@ -1,5 +1,5 @@
 <tool id="SailfishGetDatasetDatPath" name="SailfishGetDatasetDatPath" version="0.01">
-<description>__lt__description__gt__get datfile-fullpath from Sailfish output__lt__/description__gt__</description>
+<description>get datfile-fullpath from Sailfish output</description>
 
 <command interpreter="python">
 
