@@ -4,7 +4,7 @@
 <command interpreter="python">
 
         AddHeaderForEdgeR.py --script_path "$runMe" --interpreter "python" 
-            --tool_name "AddHeaderForEdgeR" --input_tab "$input1"   --output_dir "./" --output_tab "$tab_file" 
+            --tool_name "AddHeaderForEdgeR" --input_tab "$input1"   --output_dir "./" --output_tab "$tab_file" --input_gname "$input_gname" --input_rep_str "$input_rep_str"
 </command>
 <inputs>
 <param name="input1"  type="data" format="tabular" label="Select a suitable input file from your history"/> 
@@ -34,15 +34,14 @@ pd.set_option('multi_sparse', False)
 print u"AddHeaderForEdgeR.py Started......"
 
 inp = sys.argv[1]
-outp = sys.argv[2]
-gname = sys.argv[3]
-rep_str = sys.argv[4]
-rep = int(rep_str) if int(rep_str) &gt; 0 else 1
-
 print u"inp: " + inp
+outp = sys.argv[2]
 print u"outp: " + outp
+gname = sys.argv[3]
 print u"groupname: " + gname
+rep_str = sys.argv[4]
 print u"number of replicate: " + rep_str
+rep = int(rep_str) if int(rep_str) > 0 else 1
 
 def makeGroupname():
         glist = [ u"G" + str((x + 1)) + u":" + y for x,y in enumerate(gname.split(",")) ]

@@ -1,5 +1,5 @@
 <tool id="SailfishConvertAndMergeColumnForDEG" name="SailfishConvertAndMergeColumnForDEG" version="0.01">
-<description>column trimming, merge, and value convert to integer</description>
+<description>column trimming, merge, and value convert to integer from sailfish</description>
 
 <command interpreter="python">
 
@@ -55,7 +55,12 @@ def main():
     print(str(len(df_list)) + ' files convert to dataframe.')
     print df_list[0].head(10)
 
-    if 'EstimatedNumReads' in list(df_list[0].columns.values):
+    chk_colname = [len(list(set([y.find("EstimatedNumReads") for y in list(x.columns.values)]))) for x in df_list]
+    print chk_colname
+
+    if 1 in chk_colname:
+        print 'This dataset not Sailfish output format.'
+    else:
         m_df = pd.DataFrame(columns=['# Transcript'])
         for df in df_list:
             cols = [x for x in df.columns if "Transcript" in x or "EstimatedNumReads" in x]
@@ -66,10 +71,7 @@ def main():
         m_df = m_df.reindex_axis(sorted(m_df.columns), axis=1)
         m_df = m_df.rename(columns={'# Transcript' : 'target_id'})
         print m_df.head(10)
-
         dataout(m_df, outp)
-    else:
-        print 'This dataset not Sailfish output format.'
 
 if __name__ == '__main__':
         main()
@@ -92,7 +94,7 @@ if __name__ == '__main__':
 This Tool trimming, merge, and value convert to integer from Sailfish count-data for DEG.
 
 **Attribution**
-This Galaxy tool was created by mika.yoshimura@riken.jp at 31/01/2015 00:20:01
+This Galaxy tool was created by mika.yoshimura@riken.jp at 02/02/2015 15:45:05
 using the Galaxy Tool Factory.
 
 See https://bitbucket.org/fubar/galaxytoolfactory for details of that project
