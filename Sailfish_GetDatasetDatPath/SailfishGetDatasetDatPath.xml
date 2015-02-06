@@ -39,6 +39,9 @@ outp = sys.argv[2]
 print u"inp: " + inp
 print u"outp: " + outp
 
+if not os.path.isfile('../../../../local_setting.ini'):
+    raise Exception, ' local_setting.ini(API_KEY) file is not found.'
+
 def findDatfilePath(dClient, h_list):
 
     dset_list = [dset for dset in [dClient.show_dataset(hst['id']) for hst in h_list]
