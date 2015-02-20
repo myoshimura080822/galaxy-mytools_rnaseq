@@ -49,7 +49,7 @@ def findDatfilePath(dClient, h_list, hname):
     dset_df = pandas.DataFrame(dset_list)
     #print dset_df.head(3)
     dset_path = dset_df[["hid","name","file_name"]]
-    dset_path['History Name (!!CAUTION!! If name is WRONG, Please logoff and login again.)'] = hname
+    dset_path['History Name >!!CAUTION!! If name is WRONG, Please logoff & login again.)'] = hname
     print dset_path.head(3)
 
     return dset_path

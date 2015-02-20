@@ -38,12 +38,13 @@ outp = sys.argv[2]
 print u"inp: " + inp
 print u"outp: " + outp
 
-def findDatfilePath(dClient, h_list):
+def findDatfilePath(dClient, h_list, hname):
     dset_list = [dset for dset in [dClient.show_dataset(hst['id']) for hst in h_list]
         if (dset['file_ext'] == 'txt' or dset['file_ext'] == 'tablur') and '.dat' in dset['file_name'] and 'target_id' in dset['peek']]
     dset_df = pandas.DataFrame(dset_list)
     #print dset_df.head(3)
     dset_path = dset_df[["hid","name","file_name"]]
+    dset_path['History Name !!CAUTION!! If name is WRONG, Please logoff and login again.'] = hname
     print dset_path.head(3)
     return dset_path
 
@@ -67,7 +68,7 @@ def main():
     hst_cont_all = hClient.show_history(hst['id'], deleted=False, contents=True, visible=True, details=True)
     hst_cont_ok = [x for x in hst_cont_all if 'eXpress' in x['name'] and x['deleted'] == False and x['state'] == 'ok' ]
     if (len(hst_cont_ok) &gt; 0):
-        path_list = findDatfilePath(dClient, hst_cont_ok)
+        path_list = findDatfilePath(dClient, hst_cont_ok, hst['name'])
         dataout(path_list, outp)
     else:
         print 'eXpress output &gt;&gt;&gt; not found.'
