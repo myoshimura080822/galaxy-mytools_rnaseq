@@ -40,9 +40,15 @@ print u"inp: " + inp
 print u"outp: " + outp
 
 if not os.path.isfile('../../../../local_setting.ini'):
+<<<<<<< HEAD
     raise Exception, 'local_setting.ini(API_KEY) is not found.'
 
 def findDatfilePath(dClient, h_list, hname):
+=======
+    raise Exception, ' local_setting.ini(API_KEY) file is not found.'
+
+def findDatfilePath(dClient, h_list):
+>>>>>>> f5df9b6de49c7f8720dd88d032614b4a3478989d
 
     dset_list = [dset for dset in [dClient.show_dataset(hst['id']) for hst in h_list]
                     if (dset['file_ext'] == 'txt' or dset['file_ext'] == 'txt') and '.dat' in dset['file_name']]
