@@ -4,11 +4,13 @@
 <command interpreter="python">
 
         SailfishGetDatasetDatPath.py --script_path "$runMe" --interpreter "python" 
-            --tool_name "SailfishGetDatasetDatPath"   --output_dir "./" --output_tab "$tab_file" 
+            --tool_name "SailfishGetDatasetDatPath" --input_apikey "$input_apikey" --output_dir "./" --output_tab "$tab_file" 
 </command>
 <inputs>
 <param name="job_name" type="text" label="Supply a name for the outputs to remind you what they contain" value="SailfishGetDatasetDatPath"/> 
-
+<param name="input_apikey" type="text" label="Copy and Paste your API_KEY from Menu-bar[User]>[API keys]>[Current API key]" value="">
+    <validator type="empty_field" message="No API_KEY is available for the input text form"/>
+</param>
 </inputs>
 <outputs>
  <data format="tabular" name="tab_file" label="${job_name}"/>
@@ -35,12 +37,14 @@ import pandas
 print u"Sailfish_GetDatasetDatPath.py Started......"
 
 inp = sys.argv[1]
-outp = sys.argv[2]
+inp_apikey = sys.argv[2]
+outp = sys.argv[3]
+print u"inp_apikey: " + inp_apikey
 print u"inp: " + inp
 print u"outp: " + outp
 
-if not os.path.isfile('../../../../local_setting.ini'):
-    raise Exception, 'local_setting.ini(API_KEY) is not found.'
+if len(inp_apikey.strip()) == 0:
+    raise Exception, ' API_KEY is not found.'
 
 def findDatfilePath(dClient, h_list, hname):
     dset_list = [dset for dset in [dClient.show_dataset(hst['id']) for hst in h_list]
@@ -56,15 +60,9 @@ def findDatfilePath(dClient, h_list, hname):
 def dataout(data, filename):
     data.to_csv(filename, sep="\t")
 
-def get_apikey():
-    config = ConfigParser.SafeConfigParser()
-    config.read('../../../../local_setting.ini')
-    key = config.get('admin','api_key')
-    return key
-
 def main():
     GALAXY_URL = 'http://127.0.0.1:8080/'
-    API_KEY = get_apikey()
+    API_KEY = inp_apikey
     gInstance = GalaxyInstance(url = GALAXY_URL, key=API_KEY)
     hClient = HistoryClient(gInstance)
     dClient = DatasetClient(gInstance)
