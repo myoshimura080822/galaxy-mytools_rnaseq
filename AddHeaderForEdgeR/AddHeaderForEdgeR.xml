@@ -9,9 +9,12 @@
 <inputs>
 <param name="input1"  type="data" format="tabular" label="Select a suitable input file from your history"/> 
 <param name="job_name" type="text" label="Supply a name for the outputs to remind you what they contain" value="AddHeaderForEdgeR"/>
-<param name="input_gname"  type="text" label="input groupID"/>_
-<param name="input_rep_str"  type="text" label="input replication count"/>_
-
+<param name="input_gname"  type="text" label="input groupID">
+    <validator type="empty_field" message="The group ID is required field"/>
+</param>_
+<param name="input_rep_str"  type="text" label="input replication count">_
+    <validator type="empty_field" message="The replication count is required field"/>
+</param>
 </inputs>
 <outputs>
  <data format="tabular" name="tab_file" label="${job_name}"/>
@@ -32,6 +35,12 @@ import pandas as pd
 pd.set_option('multi_sparse', False)
 
 print u"AddHeaderForEdgeR.py Started......"
+
+if len(sys.argv[3].strip())==0 or sys.argv[3].strip()=="None":
+    raise Exception, ' The group ID is empty '
+
+if len(sys.argv[4].strip())==0 or sys.argv[4].strip()=="None":
+    raise Exception, ' The replication count is empty '
 
 inp = sys.argv[1]
 print u"inp: " + inp

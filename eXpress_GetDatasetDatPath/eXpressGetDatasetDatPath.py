@@ -203,6 +203,7 @@ class ScriptRunner:
         else:
             a('-') # stdin
         a(opts.input_tab)
+        a(opts.input_apikey)
         a(opts.output_tab)
         self.outputFormat = self.opts.output_format
         self.inputFormats = self.opts.input_formats 
@@ -703,6 +704,7 @@ def main():
     a = op.add_option
     a('--script_path',default=None)
     a('--tool_name',default=None)
+    a('--input_apikey',default=None)
     a('--interpreter',default=None)
     a('--output_dir',default='./')
     a('--output_html',default=None)
