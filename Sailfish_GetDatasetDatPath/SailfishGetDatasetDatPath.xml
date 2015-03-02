@@ -23,15 +23,11 @@ import sys
 import os
 print "python :" + sys.version
 import ConfigParser
-
-sys.path.append('/usr/lib/python2.6/site-packages')
 import dateutil.tz
 import bioblend
 from bioblend.galaxy import GalaxyInstance
 from bioblend.galaxy.histories import HistoryClient
 from bioblend.galaxy.datasets import DatasetClient
-
-sys.path.append('/usr/lib64/python2.6/site-packages')
 import pandas
 
 print u"Sailfish_GetDatasetDatPath.py Started......"

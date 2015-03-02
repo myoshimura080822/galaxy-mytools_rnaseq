@@ -24,9 +24,7 @@ import shutil
 import glob
 
 print "python :" + sys.version
-sys.path.append('/usr/lib/python2.6/site-packages')
 import dateutil.tz
-sys.path.append('/usr/lib64/python2.6/site-packages')
 import pandas as pd
 
 print u"Sailfish_ConvertAndMergeColumnForDEG.py Started......"

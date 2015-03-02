@@ -26,11 +26,7 @@
 import sys
 import os
 print "python :" + sys.version
-
-sys.path.append('/usr/lib/python2.6/site-packages')
 import dateutil.tz
-
-sys.path.append('/usr/lib64/python2.6/site-packages')
 import pandas as pd
 pd.set_option('multi_sparse', False)
 
