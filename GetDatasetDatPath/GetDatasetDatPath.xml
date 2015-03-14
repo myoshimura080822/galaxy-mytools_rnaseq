@@ -9,14 +9,14 @@
 </command>
 
 <inputs>
-    <param name="job_name" size="30" type="text" label="Supply a name for the outputs to remind you what they contain" value="GetDatasetDatPath"/> 
-    <param name="input_apikey" size="50" type="text" label="Copy and Paste your API_KEY from Menu-bar[User]>[API keys]>[Current API key]" value="">
+    <param name="job_name" size="30" type="text" label="Supply a name for the outputs to remind you what they contain " value="GetDatasetDatPath"/> 
+    <param name="input_apikey" size="50" type="text" label="Copy and Paste your API_KEY from Menu-bar[User]>[API keys]>[Current API key] " value="">
         <validator type="empty_field" message="No API_KEY is available for the input text form"/>
     </param>
-    <param name="input_hname" size="30" type="text" label="Supply your Current history name from top of history pain." value="">
+    <param name="input_hname" size="30" type="text" label="Supply your Current history name from top of history pain " value="">
         <validator type="empty_field" message="No Current hitory name is available for the input text form"/>
     </param>
-    <param name="input_wftype" type="select" label="Chouse of used quantification tool.">
+    <param name="input_wftype" type="select" label="Chouse of used quantification tool ">
         <option value="sailfish">use Sailfish</option>
         <option value="eXpress">use eXpress</option>
     </param>
