@@ -34,8 +34,9 @@ cat("output file name:");outf
 cat("\n")
 
 deg_output &lt;- read.table(inf, header=T, row.names=1, sep="\t")
-head(deg_output);nrow(deg_output)
-deg_type = ifelse((ncol(deg_output)==5),"edger","scde")
+head(deg_output)
+nrow(deg_output)
+deg_type = ifelse((ncol(deg_output)==4),"edger","scde")
 print(deg_type)
 deg_output\$REFSEQ &lt;- rownames(deg_output)
 ref_key = ifelse(grepl("ENSMUST",deg_output\$REFSEQ[1]),22,17)
