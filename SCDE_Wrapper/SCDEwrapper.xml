@@ -1,19 +1,23 @@
 <tool id="SCDEwrapper" name="SCDEwrapper" version="0.01">
-<description>Estimates differential gene expression for  single-cell RNA-seq measurements</description>
+
 
 <command interpreter="python">
 
         SCDEwrapper.py --script_path "$runMe" --interpreter "Rscript" 
-            --tool_name "SCDEwrapper" --input_tab "$input1"   --output_dir "./" --output_tab "$tab_file" 
+            --tool_name "SCDEwrapper" --input_tab "$input1" --output_dir "$html_file.files_path" --notuse_flex "$notuse_flex" --dropout_base "$dropout_base" --failed_base "$failed_base" --output_tab "$tab_file" --output_html "$html_file" --make_HTML "yes" --count_fpkm "$count_fpkm" 
 </command>
 <inputs>
 <param name="input1"  type="data" format="tabular" label="Select a suitable input file from your history"/> 
+<param name="notuse_flex" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Use a fast threshold-based segmentation during cross-fit (No: Use FlexMix)"/>
+<param name="dropout_base" type="integer" label="Input number of reads to use to guess which genes may have 'failed' to be detected in a given measurement during cross-cell comparison" value="4"/> 
+<param name="failed_base" type="integer" label="Input minimal number of non-failed observations required for a gene to be used in the final model fitting" value="3"/> 
 <param name="job_name" type="text" label="Supply a name for the outputs to remind you what they contain" value="SCDEwrapper"/> 
 
 </inputs>
 <outputs>
- <data format="tabular" name="tab_file" label="${job_name}"/>
-
+ <data format="tabular" name="tab_file" label="${job_name} on ${on_string}_expression.difference"/>
+ <data format="tabular" name="count_fpkm" label="${job_name} on ${on_string}_fpkm"/>
+ <data format="html" name="html_file" label="${job_name} on ${on_string}_output.html"/>
 </outputs>
 <configfiles>
 <configfile name="runMe">
@@ -26,8 +30,16 @@ require(methods)
 ourargs = commandArgs(TRUE)
 inf = ourargs[1]
 outf = ourargs[2]
+notuse_flex = as.logical(ourargs[3])
+dropout_base = as.integer(ourargs[4])
+failed_base = as.integer(ourargs[5])
+count_fpkm = ourargs[6]
 cat("input file name:");inf
+cat("use threshold-based segmentation:");notuse_flex
+cat("use 'dropout' baseline used cross-cell comparison:");dropout_base
+cat("use 'failed gene' baseline used final model fitting:");failed_base
 cat("output file name:");outf
+cat("ouput fpkm:");count_fpkm
 cat("\n")
 
 inp_data &lt;- read.table(inf, sep="\t", comment="", as.is=T)
@@ -58,10 +70,15 @@ for(i in colnames(inp_data))
 
 head(inp_data)
 
-o.ifm &lt;- scde.error.models(counts=inp_data, groups=inp_data_factor, n.cores=4, threshold.segmentation=T, save.crossfit.plots=F, save.model.plots=F, verbose=1)
+o.ifm &lt;- scde.error.models(counts=inp_data, groups=inp_data_factor, n.cores=4, threshold.segmentation=notuse_flex, min.count.threshold=dropout_base, min.nonfailed=failed_base, save.crossfit.plots=T, save.model.plots=T, verbose=1)
 head(o.ifm)
 
 o.ifm &lt;- o.ifm[o.ifm\$corr.a &gt; 0, ]
+
+fpkm &lt;- t((t(log(inp_data[,rownames(o.ifm),drop=F]))-o.ifm\$corr.b)/o.ifm\$corr.a)
+fpkm &lt;- log10(exp(as.matrix(fpkm))+1)
+head(fpkm)
+write.table(fpkm,count_fpkm,row.names=T,col.names=T,sep="\t",quote=F)
 
 o.prior &lt;- scde.expression.prior(
   models=o.ifm, counts=inp_data,
@@ -81,6 +98,7 @@ cat("....All Done. End of Script\n")
 </configfiles>
 
 
+
         <tests>
         <test>
         <param name="input1" value="SCDEwrapper_test1_input.xls" ftype="tabular"/>
@@ -94,9 +112,7 @@ cat("....All Done. End of Script\n")
 <help>
 
 
-[Attribution] 
-This tool wraps the SCDE Bioconductor package so all calculations and plots are controlled by that code. See SCDE for all documentation and appropriate attribution. Recommended reference is Kharchenko PV, Silberstein L, Scadden DT, Nature Methods, doi:
-http://pklab.med.harvard.edu/scde/index.html
+**What it Does**
 
 **Script**
 Pressing execute will run the following code over your input file and generate some outputs in your history::
@@ -143,7 +159,7 @@ Pressing execute will run the following code over your input file and generate s
  
  head(inp_data)
  
- o.ifm &lt;- scde.error.models(counts=inp_data, groups=inp_data_factor, n.cores=4, threshold.segmentation=T, save.crossfit.plots=F, save.model.plots=F, verbose=1)
+ o.ifm &lt;- scde.error.models(counts=inp_data, groups=inp_data_factor, n.cores=4, threshold.segmentation=T, save.crossfit.plots=T, save.model.plots=T, verbose=1)
  head(o.ifm)
  
  o.ifm &lt;- o.ifm[o.ifm\$corr.a &gt; 0, ]
@@ -164,7 +180,7 @@ Pressing execute will run the following code over your input file and generate s
  cat("....All Done. End of Script\n")
 
 **Attribution**
-This Galaxy tool was created by mika.yoshimura@riken.jp at 30/03/2015 17:19:07
+This Galaxy tool was created by admin@galaxy.org at 16/04/2015 10:09:46
 using the Galaxy Tool Factory.
 
 See https://bitbucket.org/fubar/galaxytoolfactory for details of that project
