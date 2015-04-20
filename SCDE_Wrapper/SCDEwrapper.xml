@@ -1,5 +1,5 @@
 <tool id="SCDEwrapper" name="SCDEwrapper" version="0.01">
-
+<description>Estimates differential gene expression for  single-cell RNA-seq measurements</description>
 
 <command interpreter="python">
 
