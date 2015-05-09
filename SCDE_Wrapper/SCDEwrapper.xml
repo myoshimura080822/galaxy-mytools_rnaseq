@@ -63,8 +63,14 @@ header_d &lt;- as.data.frame(inp_data_groups);header_d
 inp_data_factor &lt;- unname(unlist(header_d[1,]));inp_data_factor
 
 rownames(inp_data) &lt;- inp_data[,1]
+
+samplename &lt;- inp_data[2,]
+colnames(inp_data) &lt;- samplename
 inp_data &lt;- inp_data[-(1:2), -1]
-colnames(inp_data) &lt;- names(inp_data_groups)
+
+#inp_data &lt;- inp_data[-(1:2), -1]
+#colnames(inp_data) &lt;- names(inp_data_groups)
+
 for(i in colnames(inp_data))
   inp_data[, i] &lt;- as.numeric(inp_data[,i])
 

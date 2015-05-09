@@ -34,25 +34,25 @@ cat("output file name:");outf
 cat("\n")
 
 deg_output &lt;- read.table(inf, header=T, row.names=1, sep="\t")
-head(deg_output)
-nrow(deg_output)
+head(deg_output);nrow(deg_output)
+
 deg_type = ifelse((ncol(deg_output)==4),"edger","scde")
 print(deg_type)
+
 deg_output\$REFSEQ &lt;- rownames(deg_output)
 ref_key = ifelse(grepl("ENSMUST",deg_output\$REFSEQ[1]),22,17)
 print(ref_key)
 
 mm = Mus.musculus
 mm_ant_ref&lt;- select(mm, keys=keys(mm, keytype=keytypes(mm)[ref_key]), columns=columns(mm)[c(ref_key,18)], keytype=keytypes(mm)[ref_key])
-head(mm_ant_ref)
 names(mm_ant_ref)[1] &lt;- paste("REFSEQ")
 
-if (deg_type == "edger"){
-    merge_symbol &lt;- join(deg_output, mm_ant_ref, by="REFSEQ", type="left", match="all")[,c(5,6,1,2,3,4)]
-} else {
-    merge_symbol &lt;- join(deg_output, mm_ant_ref, by="REFSEQ", type="left", match="all")[,c(7,8,1,2,3,4,5,6)]
-}
-head(merge_symbol)
+mm_ant_ref &lt;- subset(mm_ant_ref, select=c("REFSEQ", "SYMBOL"))
+mm_ant_ref &lt;- mm_ant_ref[!duplicated(mm_ant_ref\$REFSEQ),]
+head(mm_ant_ref);nrow(mm_ant_ref)
+
+merge_symbol &lt;- left_join(deg_output, mm_ant_ref, by="REFSEQ")
+head(merge_symbol);nrow(merge_symbol)
 
 write.table(merge_symbol, outf, quote=FALSE, sep="\t",row.names=F)
 

@@ -591,35 +591,35 @@ o.close()
                 nacross = 1
                 npdf = len(ourpdfs)
 
-                if npdf > 0:
-                    nacross = math.sqrt(npdf) ## int(round(math.log(npdf,2)))
-                    if int(nacross)**2 != npdf:
-                        nacross += 1
-                    nacross = int(nacross)
-                    width = min(400,int(1200/nacross))
-                    html.append('<div class="toolFormTitle">%s images and outputs</div>' % sectionname)
-                    html.append('(Click on a thumbnail image to download the corresponding original PDF image)<br/>')
-                    ntogo = nacross # counter for table row padding with empty cells
-                    html.append('<div><table class="simple" cellpadding="2" cellspacing="2">\n<tr>')
-                    for i,paths in enumerate(ourpdfs): 
-                        fname,thumb = paths
-                        s= """<td><a href="%s"><img src="%s" title="Click to download a PDF of %s" hspace="5" width="%d" 
-                           alt="Image called %s"/></a></td>\n""" % (fname,thumb,fname,width,fname)
-                        if ((i+1) % nacross == 0):
-                            s += '</tr>\n'
-                            ntogo = 0
-                            if i < (npdf - 1): # more to come
-                               s += '<tr>'
-                               ntogo = nacross
-                        else:
-                            ntogo -= 1
-                        html.append(s)
-                    if html[-1].strip().endswith('</tr>'):
-                        html.append('</table></div>\n')
-                    else:
-                        if ntogo > 0: # pad
-                           html.append('<td>&nbsp;</td>'*ntogo)
-                        html.append('</tr></table></div>\n')
+                #if npdf > 0:
+                #    nacross = math.sqrt(npdf) ## int(round(math.log(npdf,2)))
+                #    if int(nacross)**2 != npdf:
+                #        nacross += 1
+                #    nacross = int(nacross)
+                #    width = min(400,int(1200/nacross))
+                #    html.append('<div class="toolFormTitle">%s images and outputs</div>' % sectionname)
+                #    html.append('(Click on a thumbnail image to download the corresponding original PDF image)<br/>')
+                #    ntogo = nacross # counter for table row padding with empty cells
+                #    html.append('<div><table class="simple" cellpadding="2" cellspacing="2">\n<tr>')
+                #    for i,paths in enumerate(ourpdfs): 
+                #        fname,thumb = paths
+                #        s= """<td><a href="%s"><img src="%s" title="Click to download a PDF of %s" hspace="5" width="%d" 
+                #           alt="Image called %s"/></a></td>\n""" % (fname,thumb,fname,width,fname)
+                #        if ((i+1) % nacross == 0):
+                #            s += '</tr>\n'
+                #            ntogo = 0
+                #            if i < (npdf - 1): # more to come
+                #               s += '<tr>'
+                #               ntogo = nacross
+                #        else:
+                #            ntogo -= 1
+                #        html.append(s)
+                #    if html[-1].strip().endswith('</tr>'):
+                #        html.append('</table></div>\n')
+                #    else:
+                #        if ntogo > 0: # pad
+                #           html.append('<td>&nbsp;</td>'*ntogo)
+                #        html.append('</tr></table></div>\n')
                 
                 #logt = open(logfname,'r').readlines()
                 #logtext = [x for x in logt if x.strip() > '']
@@ -657,7 +657,7 @@ o.close()
                 sto = open(self.tlog,'w')
                 sto.write('## Toolfactory generated command line = %s\n' % ' '.join(self.cl))
                 sto.flush()
-	        p = subprocess.Popen(self.cl,shell=False,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=self.opts.output_dir)
+                p = subprocess.Popen(self.cl,shell=False,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=self.opts.output_dir)
                 #p = subprocess.Popen(self.cl,shell=False,stdout=sto,stderr=ste,stdin=subprocess.PIPE,cwd=self.opts.output_dir)
             else:
                 p = subprocess.Popen(self.cl,shell=False,stdin=subprocess.PIPE)
@@ -666,19 +666,19 @@ o.close()
             
             stdout_data, stderr_data = p.communicate()
             p.stdin.close()
-	    #retval = p.wait()
+            #retval = p.wait()
             retval = p.returncode
 
             if self.opts.output_dir:
                 sto.close()
                 ste.close()
-		err = stderr_data
+                err = stderr_data
                 #err = open(self.elog,'r').readlines()
 	    
             print >> sys.stdout, stdout_data
-
- 	    if retval <> 0 and err: # problem
-                    print >> sys.stderr,err
+            
+            if retval <> 0 and err: # problem
+                print >> sys.stderr,err
 
             if self.opts.make_HTML:
                 self.makeHtml()
